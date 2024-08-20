@@ -10,6 +10,7 @@ import ContactPage from './pages/contact';
 import BookPage from './pages/book';
 import { Outlet } from "react-router-dom";
 import Home from './components/Home';
+import RegisterPage from './pages/register';
 
 const Layout = () => {
   return (
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />
   }
 ]);
 
