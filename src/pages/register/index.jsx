@@ -36,7 +36,7 @@ const RegisterPage = () => {
                 autoComplete="off"
             >
                 <Form.Item
-                    label="Full Name"
+                    label="Họ tên"
                     name="fullName"
                     rules={[
                         {
@@ -62,7 +62,7 @@ const RegisterPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Password"
+                    label="Mật khẩu"
                     name="password"
                     rules={[
                         {
@@ -75,7 +75,7 @@ const RegisterPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Phone"
+                    label="Số điện thoại"
                     name="phone"
                     rules={[
                         {
@@ -94,8 +94,11 @@ const RegisterPage = () => {
                         span: 16,
                     }}
                 >
-                    <Button type="primary" htmlType="submit">
-                        Submit
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={false}>
+                        Đăng ký
                     </Button>
                 </Form.Item>
             </Form>
