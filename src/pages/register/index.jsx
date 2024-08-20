@@ -1,10 +1,36 @@
-import { Button, Divider, Form, Input } from 'antd';
+import { Button, Divider, Form, Input, notification } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { registerUserAPI } from '../../services/api';
 
 const RegisterPage = () => {
     const [form] = Form.useForm();
+    const navigation = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
+    const onFinish = async (values) => {
+        setIsLoading(true);
+        const res = await registerUserAPI(
+            values.fullName,
+            values.email,
+            values.password,
+            values.phone
+        )
+        setIsLoading(false);
+        if (res?.data?._id) {
+            notification.success({
+                message: 'Đăng ký người dùng',
+                description: 'Đăng ký thành công'
+            })
+
+            // Redirect page về login
+            navigation("/login");
+        } else {
+            notification.error({
+                message: 'Lỗi đăng ký người dùng',
+                description: res.message
+            })
+        }
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -51,12 +77,12 @@ const RegisterPage = () => {
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Không để trống Email',
-                        },
-                    ]}
+                // rules={[
+                //     {
+                //         required: true,
+                //         message: 'Không để trống Email',
+                //     },
+                // ]}
                 >
                     <Input />
                 </Form.Item>
@@ -97,10 +123,18 @@ const RegisterPage = () => {
                     <Button
                         type="primary"
                         htmlType="submit"
-                        loading={false}>
+                        loading={isLoading}>
                         Đăng ký
                     </Button>
                 </Form.Item>
+
+                <Divider>Or</Divider>
+                <p className="text text-normal">Đã có tài khoản ?
+                    <span>
+                        <Link to='/login' > Đăng Nhập </Link>
+                    </span>
+                </p>
+
             </Form>
         </div>
     )
