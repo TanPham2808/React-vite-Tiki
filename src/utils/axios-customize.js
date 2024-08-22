@@ -3,6 +3,7 @@ import axios from "axios";
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 const instance = axios.create({
     baseURL: baseUrl,
+    withCredentials: true, // Lưu cook ở trình duyệt (mục đích trao đổi với BE)
 });
 
 // Add a request interceptor
