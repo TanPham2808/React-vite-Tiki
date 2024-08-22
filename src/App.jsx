@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -11,6 +11,9 @@ import BookPage from './pages/book';
 import { Outlet } from "react-router-dom";
 import Home from './components/Home';
 import RegisterPage from './pages/register';
+import { useDispatch } from 'react-redux';
+import { doGetAccountAction } from './redux/account/accountSlice';
+import { fetchAccountAPI } from './services/api';
 
 const Layout = () => {
   return (
@@ -50,6 +53,21 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
+  // Sử dụng hook Redux
+  const dispatch = useDispatch();
+
+  // Xử lý F5 page để lấy lại thông tin (bằng việc sử dụng access_token lưu trong localStorage)
+  const getAccount = async () =>{
+    const res = await fetchAccountAPI();
+    if(res && res.data){
+      dispatch(doGetAccountAction(res.data));
+    }
+  }
+
+  useEffect(()=>{
+    getAccount();
+  },[])
+
   return (
     <>
       <RouterProvider router={router} />

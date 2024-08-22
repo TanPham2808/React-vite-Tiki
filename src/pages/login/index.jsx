@@ -3,11 +3,16 @@ import { Button, Divider, Form, Input, message, notification } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { loginAPI } from "../../services/api";
+import { useDispatch } from "react-redux";
+import { doLoginAction } from "../../redux/account/accountSlice";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
+  // Sử dụng Redux
+  const dispatch = useDispatch();
 
   const onFinish = async (values) => {
     setIsLoading(true);
@@ -16,6 +21,10 @@ const LoginPage = () => {
 
     if (res?.data) {
       localStorage.setItem("access_token", res.data.access_token);
+
+      // Nạp data vào redux
+      dispatch(doLoginAction(res.data.user))
+
       message.success("Đăng nhập thành công");
       navigate("/");
     } else {

@@ -6,6 +6,9 @@ const instance = axios.create({
     withCredentials: true, // Lưu cook ở trình duyệt (mục đích trao đổi với BE)
 });
 
+// Gắn token (từ localStorage) vào header để call API
+instance.defaults.headers.common = { 'Authorization': `Bearer ${localStorage.getItem("access_token")}` }
+
 // Add a request interceptor
 instance.interceptors.request.use(function (config) {
     // Do something before request is sent
