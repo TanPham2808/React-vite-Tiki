@@ -29,6 +29,22 @@ const Layout = () => {
   )
 }
 
+const LayoutAdmin = () => {
+  const isAdminRoute = window.location.pathname.startsWith('/admin');
+  const user = useSelector(state => state.account.user);
+  const userRole = user.role;
+
+  return (
+    <div className='layout-app'>
+      {isAdminRoute && userRole === 'ADMIN' && <Header />}
+      {/* <Header /> */}
+      <Outlet />
+      {/* <Footer /> */}
+      {isAdminRoute && userRole === 'ADMIN' && <Footer />}
+    </div>
+  )
+}
+
 const router = createBrowserRouter([
   // USER
   {
@@ -51,7 +67,7 @@ const router = createBrowserRouter([
   // ADMIN
   {
     path: "/admin",
-    element: <Layout />,
+    element: <LayoutAdmin />,
     errorElement: <NotFound />,
     children: [
       {
@@ -93,8 +109,11 @@ export default function App() {
   // Xử lý F5 page để lấy lại thông tin (bằng việc sử dụng access_token lưu trong localStorage)
   const getAccount = async () => {
 
-    // Nếu là trang login thì ko gọi API refesh token
-    if (window.location.pathname === '/login') return;
+    // Nếu là trang login, register, home thì ko gọi API refesh token
+    if (window.location.pathname === '/login'
+      || window.location.pathname === '/register'
+      || window.location.pathname === '/'
+    ) return;
 
     const res = await fetchAccountAPI();
     if (res && res.data) {
@@ -108,7 +127,10 @@ export default function App() {
 
   return (
     <>
-      {isAuthenticated === true || window.location.pathname === '/login'
+      {isAuthenticated === true
+        || window.location.pathname === '/login'
+        || window.location.pathname === '/register'
+        || window.location.pathname === '/'
         ?
         <RouterProvider router={router} />
         :
