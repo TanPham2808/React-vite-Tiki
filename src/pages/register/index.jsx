@@ -77,12 +77,12 @@ const RegisterPage = () => {
                 <Form.Item
                     label="Email"
                     name="email"
-                // rules={[
-                //     {
-                //         required: true,
-                //         message: 'Không để trống Email',
-                //     },
-                // ]}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Không để trống Email',
+                        },
+                    ]}
                 >
                     <Input />
                 </Form.Item>

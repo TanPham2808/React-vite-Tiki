@@ -11,9 +11,13 @@ import BookPage from './pages/book';
 import { Outlet } from "react-router-dom";
 import Home from './components/Home';
 import RegisterPage from './pages/register';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { doGetAccountAction } from './redux/account/accountSlice';
 import { fetchAccountAPI } from './services/api';
+import Loading from './components/Loading';
+import NotFound from './components/NotFound';
+import AdminPage from './pages/admin';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const Layout = () => {
   return (
@@ -26,10 +30,11 @@ const Layout = () => {
 }
 
 const router = createBrowserRouter([
+  // USER
   {
     path: "/",
     element: <Layout />,
-    errorElement: <div>404 not found</div>,
+    errorElement: <NotFound />,
     children: [
       { index: true, element: <Home /> },  //Trang mặc định được load khi vào website
       {
@@ -42,6 +47,31 @@ const router = createBrowserRouter([
       },
     ]
   },
+
+  // ADMIN
+  {
+    path: "/admin",
+    element: <Layout />,
+    errorElement: <NotFound />,
+    children: [
+      {
+        index: true,
+        element:
+          <ProtectedRoute>
+            <AdminPage />
+          </ProtectedRoute>
+      },  //Trang mặc định được load khi vào Admin Page (được bảo vệ bởi ProtectedRoute)
+      {
+        path: "user",
+        element: <ContactPage />,
+      },
+      {
+        path: "book",
+        element: <BookPage />,
+      },
+    ]
+  },
+
   {
     path: "/login",
     element: <LoginPage />
@@ -56,21 +86,34 @@ export default function App() {
   // Sử dụng hook Redux
   const dispatch = useDispatch();
 
+  // Lấy biến isAuthenticated trong Reducer của Redux 
+  // Con Reducer tên là 'account' trong file store.js
+  const isAuthenticated = useSelector(state => state.account.isAuthenticated)
+
   // Xử lý F5 page để lấy lại thông tin (bằng việc sử dụng access_token lưu trong localStorage)
-  const getAccount = async () =>{
+  const getAccount = async () => {
+
+    // Nếu là trang login thì ko gọi API refesh token
+    if (window.location.pathname === '/login') return;
+
     const res = await fetchAccountAPI();
-    if(res && res.data){
+    if (res && res.data) {
       dispatch(doGetAccountAction(res.data));
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getAccount();
-  },[])
+  }, [])
 
   return (
     <>
-      <RouterProvider router={router} />
+      {isAuthenticated === true || window.location.pathname === '/login'
+        ?
+        <RouterProvider router={router} />
+        :
+        <Loading />
+      }
     </>
   );
 }
