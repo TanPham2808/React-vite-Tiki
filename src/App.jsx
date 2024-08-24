@@ -91,7 +91,7 @@ export default function App() {
 
   // Lấy biến isAuthenticated trong Reducer của Redux 
   // Con Reducer tên là 'account' trong file store.js
-  const isAuthenticated = useSelector(state => state.account.isAuthenticated)
+  const isLoading = useSelector(state => state.account.isLoading)
 
   // Xử lý F5 page để lấy lại thông tin (bằng việc sử dụng access_token lưu trong localStorage)
   const getAccount = async () => {
@@ -113,7 +113,7 @@ export default function App() {
 
   return (
     <>
-      {isAuthenticated === true
+      {isLoading === false
         || window.location.pathname === '/login'
         || window.location.pathname === '/register'
         || window.location.pathname === '/'

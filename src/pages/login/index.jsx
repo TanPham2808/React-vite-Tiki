@@ -23,7 +23,7 @@ const LoginPage = () => {
       localStorage.setItem("access_token", res.data.access_token);
 
       // Nạp data vào redux
-      dispatch(doLoginAction(res.data.user))
+      dispatch(doLoginAction(res.data))
 
       message.success("Đăng nhập thành công");
       navigate("/");
