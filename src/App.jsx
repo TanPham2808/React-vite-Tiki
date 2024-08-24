@@ -19,6 +19,9 @@ import NotFound from './components/NotFound';
 import AdminPage from './pages/admin';
 import ProtectedRoute from './components/ProtectedRoute';
 
+import './styles/reset.scss';
+import LayoutAdmin from './components/Admin/LayoutAdmin';
+
 const Layout = () => {
   return (
     <>
@@ -26,22 +29,6 @@ const Layout = () => {
       <Outlet />
       <Footer />
     </>
-  )
-}
-
-const LayoutAdmin = () => {
-  const isAdminRoute = window.location.pathname.startsWith('/admin');
-  const user = useSelector(state => state.account.user);
-  const userRole = user.role;
-
-  return (
-    <div className='layout-app'>
-      {isAdminRoute && userRole === 'ADMIN' && <Header />}
-      {/* <Header /> */}
-      <Outlet />
-      {/* <Footer /> */}
-      {isAdminRoute && userRole === 'ADMIN' && <Footer />}
-    </div>
   )
 }
 
@@ -112,7 +99,6 @@ export default function App() {
     // Nếu là trang login, register, home thì ko gọi API refesh token
     if (window.location.pathname === '/login'
       || window.location.pathname === '/register'
-      || window.location.pathname === '/'
     ) return;
 
     const res = await fetchAccountAPI();
