@@ -89,7 +89,7 @@ export default function App() {
   // Sử dụng hook Redux
   const dispatch = useDispatch();
 
-  // Lấy biến isAuthenticated trong Reducer của Redux 
+  // Lấy biến isLoading trong Reducer của Redux 
   // Con Reducer tên là 'account' trong file store.js
   const isLoading = useSelector(state => state.account.isLoading)
 
