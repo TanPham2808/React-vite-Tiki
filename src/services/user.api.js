@@ -1,7 +1,7 @@
 import axios from "../utils/axios-customize";
 
-const fetchUserAPI = (currentPage, pageSize) => {
-    const URL_BACKEND = `/api/v1/user?current=${currentPage}&pageSize=${pageSize}`
+const fetchUserAPI = (query) => {
+    const URL_BACKEND = `/api/v1/user?${query}`
     return axios.get(URL_BACKEND);
 }
 

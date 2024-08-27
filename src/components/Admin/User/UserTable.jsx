@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Space, Table } from 'antd';
 import { fetchUserAPI } from '../../../services/user.api';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import InputSearch from './InputSearch';
 
 const UserTable = () => {
     const [dataUser, setDataUser] = useState();
@@ -9,8 +10,16 @@ const UserTable = () => {
     const [pageSize, setPageSize] = useState(5);
     const [total, setTotal] = useState(0);
 
-    const getDataUser = async () => {
-        const res = await fetchUserAPI(currentPage, pageSize);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const getDataUser = async (searchFilter) => {
+        setIsLoading(true);
+        let query = `current=${currentPage}&pageSize=${pageSize}`;
+        if (searchFilter) {
+            query += `&${searchFilter}`
+        }
+        const res = await fetchUserAPI(query);
+        setIsLoading(false);
         if (res.data) {
             setDataUser(res.data.result);
             setCurrentPage(res.data.meta.current);
@@ -64,12 +73,21 @@ const UserTable = () => {
         }
     };
 
+    const handleSearch = async (searchFilter) => {
+        await getDataUser(searchFilter);
+    }
+
     return (
         <>
+            <InputSearch
+                isLoading={isLoading}
+                handleSearch={handleSearch}
+            />
             <Table
                 rowKey="_id"
                 columns={columns}
                 dataSource={dataUser}
+                loading={isLoading}
                 pagination={
                     {
                         current: currentPage,
