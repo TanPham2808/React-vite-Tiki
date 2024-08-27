@@ -1,6 +1,8 @@
+import UserTable from "../../components/Admin/User/UserTable";
+
 const ContactPage = () => {
     return (
-        <>Contact Page</>
+        <UserTable />
     )
 }
 

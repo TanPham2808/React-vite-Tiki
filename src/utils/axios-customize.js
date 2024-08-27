@@ -39,7 +39,7 @@ instance.interceptors.response.use(function (response) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
 
-    // Nếu access_token hết hạng
+    // Nếu access_token hết hạng (Mã lỗi 401)
     if (error.config
         && error.response
         && +error.response.status === 401
@@ -55,6 +55,16 @@ instance.interceptors.response.use(function (response) {
             localStorage.setItem('access_token', access_token);
             return instance.request(error.config);
         }
+    }
+
+    // Nếu refresh_token hết hạng (Mã lỗi 400) và đang gọi api refresh token
+    if (error.config
+        && error.response
+        && +error.response.status === 400
+        && error.config.url === '/api/v1/auth/refresh'
+    ) {
+        // Đá về page login
+        window.location.href = "/login";
     }
 
     return error?.response?.data ?? Promise.reject(error);
