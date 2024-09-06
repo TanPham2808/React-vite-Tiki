@@ -3,6 +3,7 @@ import { Space, Table } from 'antd';
 import { fetchUserAPI } from '../../../services/user.api';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import InputSearch from './InputSearch';
+import UserDetail from './UserDetail';
 
 const UserTable = () => {
     const [dataUser, setDataUser] = useState();
@@ -10,14 +11,25 @@ const UserTable = () => {
     const [pageSize, setPageSize] = useState(5);
     const [total, setTotal] = useState(0);
 
+    const [sortQuery, setSortQuery] = useState("");
+    const [filter, setFilter] = useState("");
+
     const [isLoading, setIsLoading] = useState(false);
 
-    const getDataUser = async (searchFilter) => {
+    const [openDetailUser, setOpenDetailUser] = useState(false);
+    const [infoUser, setInfoUser] = useState('');
+
+    const getDataUser = async () => {
         setIsLoading(true);
         let query = `current=${currentPage}&pageSize=${pageSize}`;
-        if (searchFilter) {
-            query += `&${searchFilter}`
+        if (filter) {
+            query += `&${filter}`
         }
+
+        if (sortQuery) {
+            query += `&${sortQuery}`;
+        }
+
         const res = await fetchUserAPI(query);
         setIsLoading(false);
         if (res.data) {
@@ -30,12 +42,20 @@ const UserTable = () => {
 
     useEffect(() => {
         getDataUser();
-    }, [currentPage, pageSize])
+    }, [currentPage, pageSize, sortQuery, filter])
 
     const columns = [
         {
             title: 'Tên hiển thị',
-            dataIndex: 'fullName',
+            render: (_, record) =>
+            (
+                <a href='#'
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                        setOpenDetailUser(true);
+                        setInfoUser(record);
+                    }}>{record.fullName}</a>
+            )
         },
         {
             title: 'Email',
@@ -71,10 +91,14 @@ const UserTable = () => {
             setPageSize(pagination.pageSize);
             setCurrentPage(1);
         }
+        if (sorter && sorter.field) {
+            let querySort = sorter.order === 'ascend' ? `sort=${sorter.field}` : `sort=-${sorter.field}`;
+            setSortQuery(querySort);
+        }
     };
 
-    const handleSearch = async (searchFilter) => {
-        await getDataUser(searchFilter);
+    const handleSearch = (searchFilter) => {
+        setFilter(searchFilter);
     }
 
     return (
@@ -96,6 +120,10 @@ const UserTable = () => {
                         showSizeChanger: true
                     }}
                 onChange={onChange} />
+            <UserDetail
+                openDetailUser={openDetailUser}
+                setOpenDetailUser={setOpenDetailUser}
+                infoUser={infoUser} />
         </>
     )
 }
