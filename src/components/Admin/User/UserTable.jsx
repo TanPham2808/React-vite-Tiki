@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Space, Table } from 'antd';
+import { Button, Space, Table } from 'antd';
 import { fetchUserAPI } from '../../../services/user.api';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import InputSearch from './InputSearch';
 import UserDetail from './UserDetail';
+import { CloudUploadOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 
 const UserTable = () => {
     const [dataUser, setDataUser] = useState();
@@ -97,6 +98,35 @@ const UserTable = () => {
         }
     };
 
+    const renderHeader = () => {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Table List User</span>
+                <span style={{ display: 'flex', gap: 15 }}>
+                    <Button
+                        icon={<ExportOutlined />}
+                        type="primary">Export
+                    </Button>
+                    <Button
+                        icon={<CloudUploadOutlined />}
+                        type="primary">Import
+                    </Button>
+                    <Button
+                        icon={<PlusOutlined />}
+                        type="primary">Thêm mới
+                    </Button>
+                    <Button type="ghost"
+                        onClick={() => {
+                            setFilter("");
+                            setSortQuery("");
+                        }}>
+                        <ReloadOutlined />
+                    </Button>
+                </span>
+            </div>
+        )
+    }
+
     const handleSearch = (searchFilter) => {
         setFilter(searchFilter);
     }
@@ -108,6 +138,7 @@ const UserTable = () => {
                 handleSearch={handleSearch}
             />
             <Table
+                title={renderHeader}
                 rowKey="_id"
                 columns={columns}
                 dataSource={dataUser}
@@ -117,7 +148,8 @@ const UserTable = () => {
                         current: currentPage,
                         pageSize: pageSize,
                         total: total,
-                        showSizeChanger: true
+                        showSizeChanger: true,
+                        showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
                     }}
                 onChange={onChange} />
             <UserDetail
