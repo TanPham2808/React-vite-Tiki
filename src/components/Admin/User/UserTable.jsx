@@ -5,6 +5,8 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import InputSearch from './InputSearch';
 import UserDetail from './UserDetail';
 import { CloudUploadOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import CreateUserModal from './CreateUserModal';
+import UserImport from './data/UserImport';
 
 const UserTable = () => {
     const [dataUser, setDataUser] = useState();
@@ -19,6 +21,9 @@ const UserTable = () => {
 
     const [openDetailUser, setOpenDetailUser] = useState(false);
     const [infoUser, setInfoUser] = useState('');
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
     const getDataUser = async () => {
         setIsLoading(true);
@@ -109,11 +114,17 @@ const UserTable = () => {
                     </Button>
                     <Button
                         icon={<CloudUploadOutlined />}
-                        type="primary">Import
+                        type="primary"
+                        onClick={() => {
+                            setIsImportModalOpen(true)
+                        }}>Import
                     </Button>
                     <Button
                         icon={<PlusOutlined />}
-                        type="primary">Thêm mới
+                        type="primary"
+                        onClick={() => {
+                            setIsModalOpen(true);
+                        }}>Thêm mới
                     </Button>
                     <Button type="ghost"
                         onClick={() => {
@@ -156,6 +167,16 @@ const UserTable = () => {
                 openDetailUser={openDetailUser}
                 setOpenDetailUser={setOpenDetailUser}
                 infoUser={infoUser} />
+            <CreateUserModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                getDataUser={getDataUser}
+            />
+            <UserImport
+                isImportModalOpen={isImportModalOpen}
+                setIsImportModalOpen={setIsImportModalOpen}
+                getDataUser={getDataUser}
+            />
         </>
     )
 }

@@ -5,4 +5,20 @@ const fetchUserAPI = (query) => {
     return axios.get(URL_BACKEND);
 }
 
-export { fetchUserAPI }
+const createUserAPI = (fullName, password, email, phone) => {
+    const URL_BACKEND = `/api/v1/user`
+    const data = {
+        fullName: fullName,
+        password: password,
+        email: email,
+        phone: phone
+    }
+    return axios.post(URL_BACKEND, data);
+}
+
+const createListUserAPI = (lstUser) => {
+    const URL_BACKEND = `/api/v1/user/bulk-create`
+    return axios.post(URL_BACKEND, lstUser);
+}
+
+export { fetchUserAPI, createUserAPI, createListUserAPI }
