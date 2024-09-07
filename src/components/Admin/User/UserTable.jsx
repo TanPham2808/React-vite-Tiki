@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Space, Table } from 'antd';
-import { fetchUserAPI } from '../../../services/user.api';
+import { Button, notification, Popconfirm, Space, Table } from 'antd';
+import { deleteUserAPI, fetchUserAPI } from '../../../services/user.api';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import InputSearch from './InputSearch';
 import UserDetail from './UserDetail';
@@ -55,6 +55,22 @@ const UserTable = () => {
         getDataUser();
     }, [currentPage, pageSize, sortQuery, filter])
 
+    const confirm = async (id) => {
+        const res = await deleteUserAPI(id);
+        if (res.data) {
+            notification.success({
+                message: "Delete User",
+                description: "Xóa người dùng thành công"
+            })
+            await getDataUser();
+        } else {
+            notification.error({
+                message: "Delete User error",
+                description: JSON.stringify(res.message)
+            })
+        }
+    }
+
     const columns = [
         {
             title: 'Tên hiển thị',
@@ -94,11 +110,18 @@ const UserTable = () => {
                             setDataUserUpdate(record);
                         }}
                     />
-                    <FaRegTrashAlt
-                        style={{ color: 'red', cursor: 'pointer' }}
-                        onClick={() => { alert('click me') }}
-                    />
+                    <Popconfirm
+                        title="Xóa người dùng"
+                        description="Bạn có chác chắn muốn xóa?"
+                        onConfirm={() => confirm(record._id)}
+                        onCancel={() => { }}
+                        okText="Xác nhận"
+                        cancelText="Hủy"
+                    >
+                        <FaRegTrashAlt style={{ color: 'red', cursor: 'pointer' }} />
+                    </Popconfirm>
                 </div>
+
             ),
         },
     ];
