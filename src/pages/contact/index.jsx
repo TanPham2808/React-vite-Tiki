@@ -1,9 +1,9 @@
 import UserTable from "../../components/Admin/User/UserTable";
 
-const ContactPage = () => {
+const UserManagerment = () => {
     return (
         <UserTable />
     )
 }
 
-export default ContactPage;
+export default UserManagerment;

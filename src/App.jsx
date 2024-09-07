@@ -21,6 +21,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 import './styles/reset.scss';
 import LayoutAdmin from './components/Admin/LayoutAdmin';
+import UserManagerment from './pages/contact';
 
 const Layout = () => {
   return (
@@ -66,7 +67,7 @@ const router = createBrowserRouter([
       },  //Trang mặc định được load khi vào Admin Page (được bảo vệ bởi ProtectedRoute)
       {
         path: "user",
-        element: <ContactPage />,
+        element: <UserManagerment />,
       },
       {
         path: "book",
