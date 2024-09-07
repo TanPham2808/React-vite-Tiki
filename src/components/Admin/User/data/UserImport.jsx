@@ -3,6 +3,7 @@ import { message, Modal, notification, Table, Upload } from 'antd';
 import { useState } from "react";
 import * as XLSX from 'xlsx';
 import { createListUserAPI } from "../../../../services/user.api";
+import templateFile from './TemplateDownloadUserImport.csv?url';
 
 const UserImport = (props) => {
     const { isImportModalOpen, setIsImportModalOpen, getDataUser } = props;
@@ -101,6 +102,7 @@ const UserImport = (props) => {
                 disabled: dataImport.length < 1
             }}
             maskClosable={false}
+            width='50vw'
             confirmLoading={confirmLoading}
         >
             <Dragger {...propsUpload}>
@@ -109,8 +111,12 @@ const UserImport = (props) => {
                 </p>
                 <p className="ant-upload-text">Click or drag file to this area to upload</p>
                 <p className="ant-upload-hint">
-                    Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-                    banned files.
+                    Support for a single or bulk upload. Only accept .csv, xls, xlsx...
+                    <a
+                        onClick={e => e.stopPropagation()}
+                        href={templateFile}
+                        download>Download Sample File
+                    </a>
                 </p>
             </Dragger>
             <div style={{ paddingTop: 20 }}>
