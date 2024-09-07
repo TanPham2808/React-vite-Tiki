@@ -4,10 +4,11 @@ import { fetchUserAPI } from '../../../services/user.api';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import InputSearch from './InputSearch';
 import UserDetail from './UserDetail';
-import { CloudUploadOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { CloudUploadOutlined, EditOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import CreateUserModal from './CreateUserModal';
 import UserImport from './data/UserImport';
 import * as XLSX from 'xlsx';
+import UpdateUserModal from './UpdateUserModal';
 
 const UserTable = () => {
     const [dataUser, setDataUser] = useState();
@@ -25,6 +26,9 @@ const UserTable = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+
+    const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+    const [dataUserUpdate, setDataUserUpdate] = useState();
 
     const getDataUser = async () => {
         setIsLoading(true);
@@ -82,10 +86,19 @@ const UserTable = () => {
         {
             title: 'Action',
             render: (_, record) => (
-                <FaRegTrashAlt
-                    style={{ color: 'red', cursor: 'pointer' }}
-                    onClick={() => { alert('click me') }}
-                />
+                <div style={{ display: 'flex', gap: 20 }}>
+                    <EditOutlined
+                        style={{ color: 'orange', cursor: 'pointer' }}
+                        onClick={() => {
+                            setIsModalUpdateOpen(true);
+                            setDataUserUpdate(record);
+                        }}
+                    />
+                    <FaRegTrashAlt
+                        style={{ color: 'red', cursor: 'pointer' }}
+                        onClick={() => { alert('click me') }}
+                    />
+                </div>
             ),
         },
     ];
@@ -181,6 +194,12 @@ const UserTable = () => {
             <CreateUserModal
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
+                getDataUser={getDataUser}
+            />
+            <UpdateUserModal
+                isModalUpdateOpen={isModalUpdateOpen}
+                setIsModalUpdateOpen={setIsModalUpdateOpen}
+                dataUserUpdate={dataUserUpdate}
                 getDataUser={getDataUser}
             />
             <UserImport
